@@ -129,6 +129,7 @@ def fb_webhook():
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
             peter = TodoList.query.filter_by(senderId = str(sender_id)).all()
             for data in peter.data:
+                print data
                 requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
                               json={'recipient': {'id': sender_id},
