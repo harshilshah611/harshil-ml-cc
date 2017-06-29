@@ -110,7 +110,7 @@ def fb_webhook():
             if 'text' not in message:
                 continue
             sender_id = event['sender']['id']
-            message_text = message['text']
+            message_text = "qwerty" #message['text']
             request_url = FACEBOOK_API_MESSAGE_SEND_URL % (
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
             requests.post(request_url,
