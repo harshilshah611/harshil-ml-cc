@@ -122,14 +122,13 @@ def fb_webhook():
             else:
                 listId = senders[sender_id] + 1
                 senders[sender_id] += 1
-            row = TodoList(str(sender_id), listId, message_text, )
+            row = TodoList(str(sender_id), listId, message_text, "N")
             db.seesion.add(row)
             db.session.commit()
             request_url = FACEBOOK_API_MESSAGE_SEND_URL % (
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
             user = TodoList.query.filter_by(senderId = str(sender_id)).all()
             for data in user.data:
-                print data
                 requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
                               json={'recipient': {'id': sender_id},
