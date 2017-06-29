@@ -182,26 +182,20 @@ def fb_webhook():
                                     'message': {'text': "Try the folowing commands\n List : Get all the To-do Items \n Add : Add a new To-do Item \n Done : Get all the check items \n Check : Check off an item by itemid"}})
             #Command : Add
             elif task == "add":
-                try:
-                    if str(sender_id) not in senders:
-                        senders[str(sender_id)] = 1
-                        listId = 1
-                    else:
-                        listId = senders[sender_id] + 1
-                        senders[sender_id] += 1
-                    
-                    row = TodoList(str(sender_id), listId, rest_message, "N")
-                    db.session.add(row)
-                    db.session.commit()
-                    requests.post(request_url,
-                                  headers={'Content-Type': 'application/json'},
-                                  json={'recipient': {'id': sender_id},
-                                        'message': {'text': rest_message+ " added to the list"}})
-                except:
-                    requests.post(request_url,
+                if str(sender_id) not in senders:
+                    senders[str(sender_id)] = 1
+                    listId = 1
+                else:
+                    listId = senders[sender_id] + 1
+                    senders[sender_id] += 1
+                
+                row = TodoList(str(sender_id), listId, rest_message, "N")
+                db.session.add(row)
+                db.session.commit()
+                requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
                               json={'recipient': {'id': sender_id},
-                                    'message': {'text': "Try the folowing commands\n List : Get all the To-do Items \n Add : Add a new To-do Item \n Done : Get all the check items \n Check : Check off an item by itemid"}})
+                                    'message': {'text': rest_message+ " added to the list"}})
             #Command : Check
             elif task == "check":
                 try:       
