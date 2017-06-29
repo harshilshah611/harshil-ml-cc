@@ -132,54 +132,42 @@ def fb_webhook():
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
             #Command : LIST
             if task=='list':
-                try:
-                    if str(sender_id) not in senders:
-                        requests.post(request_url,
-                                      headers={'Content-Type': 'application/json'},
-                                      json={'recipient': {'id': sender_id},
-                                            'message': {'text': "List Empty. Looks Like you are a new User"}})
-                    else:
-                        Items = TodoList.query.filter_by(senderId = str(sender_id)).all()
-                        requests.post(request_url,
-                                      headers={'Content-Type': 'application/json'},
-                                      json={'recipient': {'id': sender_id},
-                                            'message': {'text': "Items you have on the To-Do List are."}})
-                        for item in Items:
-                            if item.status == 'N':
-                                requests.post(request_url,
-                                              headers={'Content-Type': 'application/json'},
-                                              json={'recipient': {'id': sender_id},
-                                                    'message': {'text': str(item.listId)+ ".   " + item.data}})
-                except:
+                if str(sender_id) not in senders:
                     requests.post(request_url,
-                              headers={'Content-Type': 'application/json'},
-                              json={'recipient': {'id': sender_id},
-                                    'message': {'text': "Try the folowing commands\n List : Get all the To-do Items \n Add : Add a new To-do Item \n Done : Get all the check items \n Check : Check off an item by itemid"}})
+                                  headers={'Content-Type': 'application/json'},
+                                  json={'recipient': {'id': sender_id},
+                                        'message': {'text': "List Empty. Looks Like you are a new User"}})
+                else:
+                    Items = TodoList.query.filter_by(senderId = str(sender_id)).all()
+                    requests.post(request_url,
+                                  headers={'Content-Type': 'application/json'},
+                                  json={'recipient': {'id': sender_id},
+                                        'message': {'text': "Items you have on the To-Do List are."}})
+                    for item in Items:
+                        if item.status == 'N':
+                            requests.post(request_url,
+                                          headers={'Content-Type': 'application/json'},
+                                          json={'recipient': {'id': sender_id},
+                                                'message': {'text': str(item.listId)+ ".   " + item.data}})
             #Command : Done
             elif task == 'done':
-                try:
-                    if str(sender_id) not in senders:
-                        requests.post(request_url,
-                                      headers={'Content-Type': 'application/json'},
-                                      json={'recipient': {'id': sender_id},
-                                            'message': {'text': "List Empty. Looks like you are a new User"}})
-                    else:
-                        Items = TodoList.query.filter_by(status = "Y").all()
-                        requests.post(request_url,
-                                      headers={'Content-Type': 'application/json'},
-                                      json={'recipient': {'id': sender_id},
-                                            'message': {'text': "Items you have checked are."}})
-                        for item in Items:
-                            if item.status == 'Y':
-                                requests.post(request_url,
-                                              headers={'Content-Type': 'application/json'},
-                                              json={'recipient': {'id': sender_id},
-                                                    'message': {'text': str(item.listId)+ ".  " + item.data}})
-                except:
+                if str(sender_id) not in senders:
                     requests.post(request_url,
-                              headers={'Content-Type': 'application/json'},
-                              json={'recipient': {'id': sender_id},
-                                    'message': {'text': "Try the folowing commands\n List : Get all the To-do Items \n Add : Add a new To-do Item \n Done : Get all the check items \n Check : Check off an item by itemid"}})
+                                  headers={'Content-Type': 'application/json'},
+                                  json={'recipient': {'id': sender_id},
+                                        'message': {'text': "List Empty. Looks like you are a new User"}})
+                else:
+                    Items = TodoList.query.filter_by(status = "Y").all()
+                    requests.post(request_url,
+                                  headers={'Content-Type': 'application/json'},
+                                  json={'recipient': {'id': sender_id},
+                                        'message': {'text': "Items you have checked are."}})
+                    for item in Items:
+                        if item.status == 'Y':
+                            requests.post(request_url,
+                                          headers={'Content-Type': 'application/json'},
+                                          json={'recipient': {'id': sender_id},
+                                                'message': {'text': str(item.listId)+ ".  " + item.data}})
             #Command : Add
             elif task == "add":
                 if str(sender_id) not in senders:
@@ -198,29 +186,23 @@ def fb_webhook():
                                     'message': {'text': rest_message+ " added to the list"}})
             #Command : Check
             elif task == "check":
-                try:       
-                    if str(sender_id) not in senders:
-                        requests.post(request_url,
-                                      headers={'Content-Type': 'application/json'},
-                                      json={'recipient': {'id': sender_id},
-                                            'message': {'text': "List Empty. Looks like you are a new User"}})
-                    else:
-                        Items = TodoList.query.filter_by(senderId = str(sender_id)).all()
-                        for item in Items:
-                            if item.listId == int(rest_message):
-                                item.status = 'Y'
-                                data = item.data
-                                db.session.commit()
-                        requests.post(request_url,
+                if str(sender_id) not in senders:
+                    requests.post(request_url,
                                   headers={'Content-Type': 'application/json'},
                                   json={'recipient': {'id': sender_id},
-                                        'message': {'text': data+" checked"}})
-                except:
+                                        'message': {'text': "List Empty. Looks like you are a new User"}})
+                else:
+                    Items = TodoList.query.filter_by(senderId = str(sender_id)).all()
+                    for item in Items:
+                        if item.listId == int(rest_message):
+                            item.status = 'Y'
+                            data = item.data
+                            db.session.commit()
                     requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
                               json={'recipient': {'id': sender_id},
-                                    'message': {'text': "Try the folowing commands\n List : Get all the To-do Items \n Add : Add a new To-do Item \n Done : Get all the check items \n Check : Check off an item by itemid"}})
-            #Default
+                                    'message': {'text': data+" checked"}})
+            #DEFAULT
             else:
                 requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
