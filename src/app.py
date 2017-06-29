@@ -132,7 +132,7 @@ def fb_webhook():
             requests.post(request_url,
                           headers={'Content-Type': 'application/json'},
                           json={'recipient': {'id': sender_id},
-                                'message': {'text': "why"}})
+                                'message': {'text': "why qwerty"}})
 
     # Return an empty response.
     return ''
