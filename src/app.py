@@ -116,23 +116,23 @@ def fb_webhook():
                 continue
             sender_id = event['sender']['id']
             message_text = message['text']
-            if str(sender_id) not in senders:
-                senders[str(sender_id)] = 1
-                listId = 1
-            else:
-                listId = senders[sender_id] + 1
-                senders[sender_id] += 1
-            row = TodoList(str(sender_id), listId, message_text, "N")
-            db.seesion.add(row)
-            db.session.commit()
+            #if str(sender_id) not in senders:
+            #    senders[str(sender_id)] = 1
+            #    listId = 1
+            #else:
+            #    listId = senders[sender_id] + 1
+            #    senders[sender_id] += 1
+            #row = TodoList(str(sender_id), listId, message_text, "N")
+            #db.seesion.add(row)
+            #db.session.commit()
             request_url = FACEBOOK_API_MESSAGE_SEND_URL % (
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
-            user = TodoList.query.filter_by(senderId = str(sender_id)).all()
-            for data in user.data:
-                requests.post(request_url,
-                              headers={'Content-Type': 'application/json'},
-                              json={'recipient': {'id': sender_id},
-                                    'message': {'text': "why"}})
+            #user = TodoList.query.filter_by(senderId = str(sender_id)).all()
+            #for data in user.data:
+            requests.post(request_url,
+                          headers={'Content-Type': 'application/json'},
+                          json={'recipient': {'id': sender_id},
+                                'message': {'text': "why"}})
 
     # Return an empty response.
     return ''
