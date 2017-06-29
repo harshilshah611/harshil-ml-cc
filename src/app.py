@@ -27,7 +27,7 @@ app.config['FACEBOOK_WEBHOOK_VERIFY_TOKEN'] = 'mysecretverifytoken'
 
 
 db = SQLAlchemy(app)
-
+senders = {}
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -46,6 +46,11 @@ class Address(db.Model):
     # 'addresses' (containing a list of addresses) to each user.
     user = db.relationship('User', backref='addresses')
 
+class TodoList(db.Model):
+    senderId = db.Column(db.String(30), primary_key = True)
+    listId = db.Column(db.Integer, primary_key = True)
+    data = db.Column(db.String(100))
+    status = db.Column(db.String(10))
 
 @app.route('/')
 def index():
@@ -110,13 +115,24 @@ def fb_webhook():
             if 'text' not in message:
                 continue
             sender_id = event['sender']['id']
-            message_text = str(sender_id) #message['text']
+            message_text = message['text']
+            if str(sender_id) not in senders:
+                senders[str(sender_id)] = 1
+                listId = 1
+            else:
+                listId = senders[sender_id] + 1
+                senders[sender_id] += 1
+            row = TodoList(str(sender_id), listId, message_text, )
+            db.seesion.add(row)
+            db.session.commit()
             request_url = FACEBOOK_API_MESSAGE_SEND_URL % (
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
-            requests.post(request_url,
-                          headers={'Content-Type': 'application/json'},
-                          json={'recipient': {'id': sender_id},
-                                'message': {'text': message_text}})
+            peter = TodoList.query.filter_by(senderId = str(sender_id)).all()
+            for data in peter.data:
+                requests.post(request_url,
+                              headers={'Content-Type': 'application/json'},
+                              json={'recipient': {'id': sender_id},
+                                    'message': {'text': data}})
 
     # Return an empty response.
     return ''
