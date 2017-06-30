@@ -51,6 +51,7 @@ class Address(db.Model):
     user = db.relationship('User', backref='addresses')
 
 class TodoList(db.Model):
+    __tablename__ = 'todo_list'
     senderId = db.Column(db.String(30), primary_key = True)
     listId = db.Column(db.Integer, primary_key = True)
     data = db.Column(db.String(100))
