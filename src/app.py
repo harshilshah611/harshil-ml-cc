@@ -56,11 +56,11 @@ class TodoList(db.Model):
     data = db.Column(db.String(100))
     status = db.Column(db.String(10))
 
-    def __init__(self, a,b,c,d):
-        self.senderId = a
-        self.listId = b
-        self.data = c
-        self.status = d
+    def __init__(self, senderId, listId, data , status):
+        self.senderId = senderId
+        self.listId = listId
+        self.data = data
+        self.status = status
 
 @app.route('/')
 def index():
