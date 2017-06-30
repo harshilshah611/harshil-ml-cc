@@ -1,2 +1,1 @@
-import app
-app()
+from app import TodoList,Address, User, db
