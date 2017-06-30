@@ -130,6 +130,7 @@ def fb_webhook():
             rest_message = ' '.join(message_text.split()[1:])
             request_url = FACEBOOK_API_MESSAGE_SEND_URL % (
                 app.config['FACEBOOK_PAGE_ACCESS_TOKEN'])
+            print message_text
             #Command : LIST
             if task=='list':
                 if str(sender_id) not in senders:
