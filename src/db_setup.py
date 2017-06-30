@@ -1,8 +1,9 @@
-from app import TodoList ,Address, User, db
+from app import TodoList,Address, User, db
 
 db.drop_all()
 db.create_all()
 
+testList = TodoList(self.senderId = "a" ,self.listId = 1 ,self.data = "c" ,self.status = "N")
 admin = User(username='admin')
 guest = User(username='guest')
 admin_address = Address(full_address='1 Market St, San Francisco CA 94105',
