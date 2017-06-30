@@ -1,2 +1,1 @@
-import app
-app.main()
+__all__ = ["app"]
