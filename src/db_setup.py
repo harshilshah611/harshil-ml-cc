@@ -17,3 +17,4 @@ db.session.commit()
 
 print User.query.all()
 print Address.query.all()
+print TodoList.query.all()
