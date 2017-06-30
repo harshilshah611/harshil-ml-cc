@@ -29,7 +29,8 @@ app.config['FACEBOOK_WEBHOOK_VERIFY_TOKEN'] = 'mysecretverifytoken'
 
 db = SQLAlchemy(app)
 
-
+db.drop_all()
+db.create_all()
 
 senders = {}
 
@@ -215,6 +216,4 @@ def fb_webhook():
     return ''
 
 if __name__ == '__main__':
-    db.drop_all()
-    db.create_all()
     app.run(debug=True)
