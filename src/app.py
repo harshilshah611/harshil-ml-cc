@@ -181,6 +181,7 @@ def fb_webhook():
                     listId = senders[sender_id] + 1
                     senders[sender_id] += 1
                 
+                print senders
                 row = Todo(str(sender_id), listId, rest_message, "N")
                 db.session.add(row)
                 db.session.commit()
