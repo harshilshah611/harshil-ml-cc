@@ -30,7 +30,7 @@ app.config['FACEBOOK_WEBHOOK_VERIFY_TOKEN'] = 'mysecretverifytoken'
 db = SQLAlchemy(app)
 
 db.drop_all()
-db.create_all()
+
 
 senders = {}
 
@@ -64,6 +64,8 @@ class Todo(db.Model):
         self.data = data
         self.status = status
 
+db.create_all()
+        
 @app.route('/')
 def index():
     """Simple example handler.
