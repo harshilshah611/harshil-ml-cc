@@ -136,6 +136,7 @@ def fb_webhook():
             print message_text
             #Command : LIST
             if task=='list':
+                print str(sender_id), senders, str(sender_id) not in senders
                 if str(sender_id) not in senders:
                     requests.post(request_url,
                                   headers={'Content-Type': 'application/json'},
