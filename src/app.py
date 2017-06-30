@@ -51,7 +51,7 @@ class Address(db.Model):
     # 'addresses' (containing a list of addresses) to each user.
     user = db.relationship('User', backref='addresses')
 
-class TodoList(db.Model):
+class Todo(db.Model):
     #__tablename__ = 'todo_list'
     senderId = db.Column(db.String(30), primary_key = True)
     listId = db.Column(db.Integer, primary_key = True)
@@ -141,7 +141,7 @@ def fb_webhook():
                                   json={'recipient': {'id': sender_id},
                                         'message': {'text': "List Empty. Looks Like you are a new User"}})
                 else:
-                    Items = TodoList.query.filter_by(senderId = str(sender_id)).all()
+                    Items = Todo.query.filter_by(senderId = str(sender_id)).all()
                     requests.post(request_url,
                                   headers={'Content-Type': 'application/json'},
                                   json={'recipient': {'id': sender_id},
@@ -160,7 +160,7 @@ def fb_webhook():
                                   json={'recipient': {'id': sender_id},
                                         'message': {'text': "List Empty. Looks like you are a new User"}})
                 else:
-                    Items = TodoList.query.filter_by(status = "Y").all()
+                    Items = Todo.query.filter_by(status = "Y").all()
                     requests.post(request_url,
                                   headers={'Content-Type': 'application/json'},
                                   json={'recipient': {'id': sender_id},
@@ -180,8 +180,9 @@ def fb_webhook():
                     listId = senders[sender_id] + 1
                     senders[sender_id] += 1
                 
-                row = TodoList(str(sender_id), listId, rest_message, "N")
+                row = Todo(str(sender_id), listId, rest_message, "N")
                 db.session.add(row)
+                db.session.commit()
                 requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
                               json={'recipient': {'id': sender_id},
@@ -194,7 +195,7 @@ def fb_webhook():
                                   json={'recipient': {'id': sender_id},
                                         'message': {'text': "List Empty. Looks like you are a new User"}})
                 else:
-                    Items = TodoList.query.filter_by(senderId = str(sender_id)).all()
+                    Items = Todo.query.filter_by(senderId = str(sender_id)).all()
                     for item in Items:
                         if item.listId == int(rest_message):
                             item.status = 'Y'
