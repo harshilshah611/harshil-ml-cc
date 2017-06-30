@@ -1,1 +1,2 @@
-from app import TodoList,Address, User, db
+import app
+app.main()
