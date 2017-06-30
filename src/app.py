@@ -182,7 +182,6 @@ def fb_webhook():
                 
                 row = TodoList(str(sender_id), listId, rest_message, "N")
                 db.session.add(row)
-                db.session.commit()
                 requests.post(request_url,
                               headers={'Content-Type': 'application/json'},
                               json={'recipient': {'id': sender_id},
